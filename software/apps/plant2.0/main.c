@@ -11,22 +11,13 @@
 #include "nrf_twi_mngr.h"
 
 #include "microbit_v2.h"
-#include "lsm303agr.h"
-#include "sensors.h"
+//#include "i2c_utils.h"
+#include "moisture.h"
 #include "app_timer.h"
 
 APP_TIMER_DEF(TEMP_TIMER);
 //void print_temp();
 void print_test() {
-  //printf("Temp: %f\n", lsm303agr_read_temperature());
-  //lsm303agr_measurement_t acc = lsm303agr_read_accelerometer();
-  //printf("Acceleration: x: %f, y: %f, z: %f\n", acc.x_axis, acc.y_axis, acc.z_axis);
-  //lsm303agr_measurement_t mag = lsm303agr_read_magnetometer();
-  // printf("Magnetism: x: %f, y: %f, z: %f\n", mag.x_axis, mag.y_axis, mag.z_axis);
-  
-  //float angle = tilt_angle();
-  //printf("Angle: %f\n==========================================================\n", angle);
-
   printf("Moisture: %f\n", read_moisture());
 }
 
@@ -46,7 +37,7 @@ int main(void) {
 
   // Initialize the LSM303AGR accelerometer/magnetometer sensor
   
-  lsm303agr_init(&twi_mngr_instance);
+  moisture_init(&twi_mngr_instance);
   
   //TODO: implement me!
   app_timer_init();

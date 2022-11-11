@@ -7,7 +7,7 @@
 #include <stdint.h>
 
 #include "lsm303agr.h"
-#include "sensors.h"
+#include "moisture.h"
 #include "nrf_delay.h"
 #include <math.h>
 
