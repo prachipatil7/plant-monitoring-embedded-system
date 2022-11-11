@@ -12,17 +12,21 @@
 #include "nrf_delay.h"
 #include <math.h>
 
+static const nrf_twi_mngr_t* i2c_manager = NULL;
+
 // Read the moisture sensor
 //
 // Return measurement as [What Unit?]
 float read_moisture(void) {
 
-  i2c_reg_write(MOIST_ADDRESS, MOIST_LED_ON_REG, 0x1);
+  i2c_reg_write(MOIST_ADDRESS, MOIST_LED_ON_REG, 0x1, i2c_manager);
   //printf("Reading...\n");
 	
   //i2c_reg_write(MOIST_ADDRESS, MOIST_POWER_REG, 0x1);
   //printf("Writing 1...\n");
-  //nrf_delay_ms(1000);
+  //nrf_delay_ms(400);
+  printf("off\n");
+  //i2c_reg_write(MOIST_ADDRESS, MOIST_LED_OFF_REG, 0x1, i2c_manager);
   
   //uint16_t moisture = (uint16_t) i2c_reg_read(MOIST_ADDRESS,
 					       //MOIST_OUT_REG);
@@ -35,7 +39,29 @@ float read_moisture(void) {
 
 
 void moisture_init(const nrf_twi_mngr_t* i2c) {
+  i2c_manager = i2c;
+  
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
