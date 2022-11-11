@@ -15,7 +15,7 @@
 #include "moisture.h"
 #include "app_timer.h"
 
-APP_TIMER_DEF(TEMP_TIMER);
+//APP_TIMER_DEF(TEMP_TIMER);
 //void print_temp();
 void print_test() {
   printf("Moisture: %f\n", read_moisture());
@@ -38,15 +38,15 @@ int main(void) {
   // Initialize the LSM303AGR accelerometer/magnetometer sensor
   
   moisture_init(&twi_mngr_instance);
-  
   //TODO: implement me!
-  app_timer_init();
+  /*app_timer_init();
   app_timer_create(&TEMP_TIMER, APP_TIMER_MODE_REPEATED, print_test);
-  app_timer_start(TEMP_TIMER, 32768*2, NULL);
+  app_timer_start(TEMP_TIMER, 32768*2, NULL);*/
 
   // Loop forever
   while (1) {
     // Don't put any code in here. Instead put periodic code in a callback using a timer.
+    print_test();
     nrf_delay_ms(1000);
   }
 }
