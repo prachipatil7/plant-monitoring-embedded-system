@@ -6,7 +6,7 @@
 #include "nrf_twi_mngr.h"
 
 // i2c address for sensor
-static const uint8_t sensor_address = 0x70;
+static const uint8_t TEMP_MOISTURE_SENSOR = 0x70;
 
 // commands from datasheet 
 typedef enum {
