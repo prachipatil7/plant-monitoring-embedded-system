@@ -8,6 +8,9 @@
 static const uint8_t LSM303AGR_ACC_ADDRESS = 0x19;
 static const uint8_t LSM303AGR_MAG_ADDRESS = 0x1E;
 
+//static void i2c_reg_write(uint8_t i2c_addr, uint8_t reg_addr, uint8_t data);
+//static uint8_t i2c_reg_read(uint8_t i2c_addr, uint8_t reg_addr);
+
 // Measurement data type
 typedef struct {
   float x_axis;
@@ -80,6 +83,8 @@ typedef enum {
   LSM303AGR_MAG_OUT_Z_H_REG = 0X6D,
 } lsm303agr_mag_reg_t;
 
+
+
 // Function prototypes
 
 // Initialize and configure the LSM303AGR accelerometer/magnetometer
@@ -103,4 +108,6 @@ lsm303agr_measurement_t lsm303agr_read_accelerometer(void);
 lsm303agr_measurement_t lsm303agr_read_magnetometer(void);
 
 float tilt_angle(void);
+
+
 

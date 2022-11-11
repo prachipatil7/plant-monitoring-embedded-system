@@ -1,0 +1,14 @@
+#pragma once
+
+#include "nrf_twi_mngr.h"
+
+// Register definitions for moisture sensor
+typedef enum {
+ MOIST_OUT_REG = 0x28
+	      
+} moist_reg_t;
+
+// Read the internal moisture sensor
+//
+// Return measurement as [What Unit?]
+float read_moisture(void);
