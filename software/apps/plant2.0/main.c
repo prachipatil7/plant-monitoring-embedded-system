@@ -25,19 +25,21 @@ void print_test() {
 NRF_TWI_MNGR_DEF(twi_mngr_instance, 1, 0);
 
 int main(void) {
-  printf("Board started!\n");
+  printf("\rBoard started!\r\n");
 
   // Initialize I2C peripheral and driver
   nrf_drv_twi_config_t i2c_config = NRF_DRV_TWI_DEFAULT_CONFIG;
-  i2c_config.scl = I2C_SCL;
-  i2c_config.sda = I2C_SDA;
+  i2c_config.scl = EDGE_P19;
+  i2c_config.sda = EDGE_P20;
   i2c_config.frequency = NRF_TWIM_FREQ_100K;
   i2c_config.interrupt_priority = 0;
   nrf_twi_mngr_init(&twi_mngr_instance, &i2c_config);
 
   // Initialize the LSM303AGR accelerometer/magnetometer sensor
-  
-  moisture_init(&twi_mngr_instance);
+  shtc3_init(&twi_mngr_instance);
+  shtc3_read_temperature();
+  shtc3_read_humidity();
+  //moisture_init(&twi_mngr_instance);
   //TODO: implement me!
   /*app_timer_init();
   app_timer_create(&TEMP_TIMER, APP_TIMER_MODE_REPEATED, print_test);
@@ -46,7 +48,7 @@ int main(void) {
   // Loop forever
   while (1) {
     // Don't put any code in here. Instead put periodic code in a callback using a timer.
-    print_test();
+    //print_test();
     nrf_delay_ms(1000);
   }
 }

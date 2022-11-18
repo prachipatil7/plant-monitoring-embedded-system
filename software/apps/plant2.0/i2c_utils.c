@@ -33,7 +33,7 @@ uint8_t i2c_reg_read(uint8_t i2c_addr, uint8_t reg_addr) {
 // i2c_addr - address of the device to write to
 // reg_addr - address of the register within the device to write
 void i2c_reg_write(uint8_t i2c_addr, uint8_t reg_addr, uint8_t data) {
-  uint8_t p_data[] = {reg_addr};//, data};
+  uint8_t p_data[] = {reg_addr, data};
   nrf_twi_mngr_transfer_t const write_transfer[] = {
      NRF_TWI_MNGR_WRITE(i2c_addr,
 			&p_data,
