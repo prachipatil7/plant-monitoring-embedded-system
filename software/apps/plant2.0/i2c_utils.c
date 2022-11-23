@@ -37,7 +37,7 @@ void i2c_reg_write(uint8_t i2c_addr, uint8_t reg_addr, uint8_t data) {
   nrf_twi_mngr_transfer_t const write_transfer[] = {
      NRF_TWI_MNGR_WRITE(i2c_addr,
 			&p_data,
-			1,
+			2,
 			0)				  						   
   };
   nrf_twi_mngr_perform(i2c_manager, NULL, write_transfer, 1, NULL);

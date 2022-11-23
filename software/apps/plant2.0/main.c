@@ -52,7 +52,7 @@ int main(void) {
   while (1) {
     // Don't put any code in here. Instead put periodic code in a callback using a timer.
     //print_test();
-    printf("CH0: %d\n", spect_read_channel(1));
+    printf("CH0: %d\n", spect_read_channel(0));
     nrf_delay_ms(1000);
   }
 }
