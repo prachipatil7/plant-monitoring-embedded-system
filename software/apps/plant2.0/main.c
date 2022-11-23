@@ -13,6 +13,7 @@
 #include "microbit_v2.h"
 //#include "i2c_utils.h"
 #include "moisture.h"
+#include "spectral.h"
 #include "app_timer.h"
 
 //APP_TIMER_DEF(TEMP_TIMER);
@@ -36,19 +37,22 @@ int main(void) {
   nrf_twi_mngr_init(&twi_mngr_instance, &i2c_config);
 
   // Initialize the LSM303AGR accelerometer/magnetometer sensor
-  shtc3_init(&twi_mngr_instance);
-  shtc3_read_temperature();
-  shtc3_read_humidity();
+  //shtc3_init(&twi_mngr_instance);
+  //shtc3_read_temperature();
+  //shtc3_read_humidity();
   //moisture_init(&twi_mngr_instance);
   //TODO: implement me!
   /*app_timer_init();
   app_timer_create(&TEMP_TIMER, APP_TIMER_MODE_REPEATED, print_test);
   app_timer_start(TEMP_TIMER, 32768*2, NULL);*/
-
+  spect_init(&twi_mngr_instance);
+  nrf_delay_ms(1000);
   // Loop forever
+  uint16_t buff[12];
   while (1) {
     // Don't put any code in here. Instead put periodic code in a callback using a timer.
     //print_test();
+    printf("CH0: %d\n", spect_read_channel(1));
     nrf_delay_ms(1000);
   }
 }
