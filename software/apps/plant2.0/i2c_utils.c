@@ -8,6 +8,16 @@
 // Pointer to an initialized I2C instance to use for transactions
 static const nrf_twi_mngr_t* i2c_manager = NULL;
 
+void i2c_change_bit(uint8_t i2c_addr, uint8_t reg_addr, uint8_t bit, uint8_t data) {
+  uint8_t reg_val = i2c_reg_read(i2c_addr, reg_addr);
+  uint8_t new_val;
+  if (data == 1) {
+     new_val = reg_val | (1 << bit);
+  } else {
+     new_val = reg_val & ~(1 << bit);
+  }
+  i2c_reg_write(i2c_addr, reg_addr, new_val);
+}
 
 uint8_t i2c_reg_read(uint8_t i2c_addr, uint8_t reg_addr) {
   uint8_t rx_buf = 0;
