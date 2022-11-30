@@ -3,13 +3,12 @@
 #define ANALOG_SOIL_IN  NRF_SAADC_INPUT_AIN1
 #define ADC_SOIL_CHANNEL  0
 
-static void adc_init(void);
 static float adc_sample_blocking(uint8_t channel);
 static uint32_t volt_to_soil(float voltage);
 static void saadc_event_callback(nrfx_saadc_evt_t const* _unused);
 
 // Initialize the ADC and set up the soil moisture sensor
-static void adc_init(void) {
+void adc_init(void) {
   printf("in init\r\n");
   // Initialize the SAADC
   nrfx_saadc_config_t saadc_config = {
@@ -57,4 +56,10 @@ static uint32_t volt_to_soil(float voltage) {
   uint32_t soil = percentage > 50;
 
   return soil;
+}
+
+// TO DO----
+// IDEALLY WE JUST HAVE TO CALL THIS FUNCTION
+bool get_soil_moisture(void) {
+  return 0;
 }
