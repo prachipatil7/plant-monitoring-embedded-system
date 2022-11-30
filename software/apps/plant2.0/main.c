@@ -19,7 +19,7 @@
 //APP_TIMER_DEF(TEMP_TIMER);
 //void print_temp();
 void print_test() {
-  printf("Moisture: %f\n", read_moisture());
+  printf("Moisture: %ld\n", read_soil_moisture());
 }
 
 // Global variables
