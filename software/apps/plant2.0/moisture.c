@@ -97,8 +97,17 @@ uint32_t read_soil_moisture(void) {
   float percentage = avg_voltage*100 / 3.3;
 
   // soil: the soil moisture is either wet = 1 or dry = 0
-  bool soil = percentage > 3; //assumption
+  bool soil = percentage >= 99; //was 50 as per js code
+  //Around 95 or below is dry soil
+  //Around 99-100 or above is wet soil
+
   printf("avg_voltage: %f, percentage: %f\r\n", avg_voltage, percentage);
   printf("Soil is %d (0=dry,1=wet)\r\n", soil);
+  if (soil){
+      printf("WET\r\n");
+  }
+  else {
+      printf("DRY\r\n");
+  }
   return soil;
 }
