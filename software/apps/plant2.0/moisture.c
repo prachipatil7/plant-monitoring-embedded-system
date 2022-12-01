@@ -94,11 +94,11 @@ uint32_t read_soil_moisture(void) {
       total += adc_sample_blocking(0);
   }
   float avg_voltage = total / 100;
-  float percentage = avg_voltage*100 / 4095;
+  float percentage = avg_voltage*100 / 3.3;
 
   // soil: the soil moisture is either wet = 1 or dry = 0
-  uint32_t soil = percentage > 50;
-  printf("avg_voltage: %d, soil: %f\r\n", avg_voltage, percentage);
+  bool soil = percentage > 3; //assumption
+  printf("avg_voltage: %f, percentage: %f\r\n", avg_voltage, percentage);
   printf("Soil is %d (0=dry,1=wet)\r\n", soil);
   return soil;
 }

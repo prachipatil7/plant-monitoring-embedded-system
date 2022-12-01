@@ -63,7 +63,7 @@ int main(void) {
     }
     printf("\n");*/
     //get_soil_moisture();
-    //read_soil_moisture();
+    read_soil_moisture();
     printf("\r\n");
 
     nrf_delay_ms(2000);
