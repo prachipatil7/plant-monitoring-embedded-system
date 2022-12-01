@@ -11,16 +11,19 @@ static void saadc_event_callback(nrfx_saadc_evt_t const* _unused);
 
 // Read voltage from adc channel, this function blocks until the sample is ready
 static float adc_sample_blocking(uint8_t channel) {
-  // read ADC counts (0-4095)
-  int16_t adc_counts = 0;
-  ret_code_t error_code = nrfx_saadc_sample_convert(channel, &adc_counts);
-  APP_ERROR_CHECK(error_code);
+    // read ADC counts (0-4095)
+    // this function blocks until the sample is ready
+    int16_t adc_counts = 0;
+    ret_code_t error_code = nrfx_saadc_sample_convert(channel, &adc_counts);
+    APP_ERROR_CHECK(error_code);
 
-  // convert ADC counts to volts: 12-bit ADC with range from 0 to 3.3 Volts
-  float voltage = adc_counts * (3.3 / 4096);
+    // convert ADC counts to volts
+    // 12-bit ADC with range from 0 to 3.6 Volts
+    float adc_counts_f = (float) adc_counts;
+    float volts = (3.6 / 4096.0) * adc_counts_f;
 
-  // return voltage measurement
-  return voltage;
+    // return voltage measurement
+    return volts;
 }
 
 // Event handler -- don't care about SAADC events, ignore
@@ -44,7 +47,7 @@ static uint32_t volt_to_soil(float voltage) {
 /**** ACCESSIBLE FROM MAIN.C ****/
 
 // Initialize the ADC and set up the soil moisture sensor
-void soil_moisute_init(void) {
+void soil_moisture_init(void) {
   printf("in soil_moisture_init\r\n");
   // Initialize the SAADC
   nrfx_saadc_config_t saadc_config = {
@@ -65,13 +68,13 @@ void soil_moisute_init(void) {
 // Returns if the soil is wet or dry based on percentage of 3.3V
 // Uses all the helpers
 uint32_t get_soil_moisture(void) {
-  printf("in get_soil_moisture\r\n");
+  printf("in get_soil_moisture");
   // Read sensor
   float voltage = adc_sample_blocking(ADC_SOIL_CHANNEL);
   // Get wet or dry
   uint32_t soil = volt_to_soil(voltage);
   // Return
-  printf("Soil is %d (0=dry,1=wet)", soil);
+  printf("Soil is %d (0=dry,1=wet)\r\n", soil);
   return soil;
 }
 
@@ -79,18 +82,23 @@ uint32_t get_soil_moisture(void) {
 // Can modify to return based on actual voltage
 // No helpers
 uint32_t read_soil_moisture(void) {
-  printf("in read_soil_moisture\r\n");
+  //printf("in read_soil_moisture");
   // read ADC counts (0-4095)
-  int16_t adc_counts = 0;
+  /*int16_t adc_counts = 0;
   ret_code_t error_code = nrfx_saadc_sample_convert(ADC_SOIL_CHANNEL, &adc_counts);
-  APP_ERROR_CHECK(error_code);
+  APP_ERROR_CHECK(error_code);*/
 
   // convert ADC counts into voltage and percentage
-  float voltage = adc_counts * (3.3 / 4096);
-  float percentage = adc_counts / 4095;
+  float total = 0;
+  for(uint16_t i = 0; i < 100; i++) {
+      total += adc_sample_blocking(0);
+  }
+  float avg_voltage = total / 100;
+  float percentage = avg_voltage*100 / 4095;
 
   // soil: the soil moisture is either wet = 1 or dry = 0
   uint32_t soil = percentage > 50;
-  printf("Soil is %d (0=dry,1=wet)", soil);
+  printf("avg_voltage: %d, soil: %f\r\n", avg_voltage, percentage);
+  printf("Soil is %d (0=dry,1=wet)\r\n", soil);
   return soil;
 }

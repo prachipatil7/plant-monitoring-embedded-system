@@ -11,4 +11,4 @@ void green_light_on(void);
 
 void green_light_off(void);
 
-void test_idk(void);
+void turn_on_pump(void);

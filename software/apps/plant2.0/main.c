@@ -45,21 +45,28 @@ int main(void) {
   /*app_timer_init();
   app_timer_create(&TEMP_TIMER, APP_TIMER_MODE_REPEATED, print_test);
   app_timer_start(TEMP_TIMER, 32768*2, NULL);*/
-  spectral_init(&twi_mngr_instance);
-  nrf_delay_ms(1000);
+  /*spectral_init(&twi_mngr_instance);
+  nrf_delay_ms(1000);*/
   // Loop forever
   uint16_t buf[10];
+  gpio_init();
+  turn_on_pump();
+  soil_moisture_init();
 
-  while (1) {
+
+    while (1) {
     // Don't put any code in here. Instead put periodic code in a callback using a timer.
     //print_test();
-    read_spectral_all_channels(buf);
+    /*read_spectral_all_channels(buf);
     for (uint8_t i=0; i<10; i++) {
       printf("F%d: %d\n", i+1, buf[i]);
     }
-    printf("\n");
+    printf("\n");*/
+    //get_soil_moisture();
+    //read_soil_moisture();
+    printf("\r\n");
 
-    nrf_delay_ms(1000);
+    nrf_delay_ms(2000);
   }
 }
 

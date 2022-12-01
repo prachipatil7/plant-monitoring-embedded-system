@@ -9,7 +9,7 @@
 
 #include "microbit_v2.h"
 
-void soil_moisute_init(void);
+void soil_moisture_init(void);
 
 // Same functionality, maybe rounding difference
 uint32_t get_soil_moisture(void);
