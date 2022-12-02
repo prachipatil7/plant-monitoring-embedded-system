@@ -13,6 +13,8 @@
 #include "microbit_v2.h"
 //#include "i2c_utils.h"
 #include "moisture.h"
+#include "temp-humidity.h"
+#include "pump.h"
 #include "spectral.h"
 #include "app_timer.h"
 
@@ -37,9 +39,9 @@ int main(void) {
   nrf_twi_mngr_init(&twi_mngr_instance, &i2c_config);
 
   // Initialize the LSM303AGR accelerometer/magnetometer sensor
-  //shtc3_init(&twi_mngr_instance);
-  //shtc3_read_temperature();
-  //shtc3_read_humidity();
+  /*shtc3_init(&twi_mngr_instance);
+  shtc3_read_temperature();
+  shtc3_read_humidity();*/
   //moisture_init(&twi_mngr_instance);
   //TODO: implement me!
   /*app_timer_init();
@@ -49,23 +51,46 @@ int main(void) {
   nrf_delay_ms(1000);*/
   // Loop forever
   uint16_t buf[10];
-  gpio_init();
-  turn_on_pump();
+
+  //Initializers
+  shtc3_init(&twi_mngr_instance);
+  pump_init();
   soil_moisture_init();
+
+  //Turn pump on and off
+  /*turn_on_pump();
+  nrf_delay_ms(500);
+  turn_off_pump();*/
+
 
 
     while (1) {
-    // Don't put any code in here. Instead put periodic code in a callback using a timer.
     //print_test();
-    /*read_spectral_all_channels(buf);
+    read_spectral_all_channels(buf);
     for (uint8_t i=0; i<10; i++) {
       printf("F%d: %d\n", i+1, buf[i]);
     }
-    printf("\n");*/
-    //get_soil_moisture();
-    read_soil_moisture();
-    printf("\r\n");
+    printf("\n");
 
+    uint32_t is_wet = read_soil_moisture();
+    if(!is_wet) {
+        turn_on_pump();
+        nrf_delay_ms(500);
+        turn_off_pump();
+        printf("Soil is DRY\r\n");
+    }
+    else {
+        printf("Soil is WET\r\n");
+    }
+
+    float T = shtc3_read_temperature();
+    float RH = shtc3_read_humidity();
+
+    printf("TEMP: %f degC\r\n", T);
+    printf("HUMIDITY: %f \r\n", RH);
+
+
+    printf("\n");
     nrf_delay_ms(2000);
   }
 }

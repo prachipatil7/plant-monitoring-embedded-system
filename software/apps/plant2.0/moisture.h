@@ -11,6 +11,4 @@
 
 void soil_moisture_init(void);
 
-// Same functionality, maybe rounding difference
-uint32_t get_soil_moisture(void);
 uint32_t read_soil_moisture(void);

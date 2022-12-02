@@ -99,7 +99,7 @@ float shtc3_read_temperature(void)
   T *= 175;
   T -= 45;
 
-  printf("TEMP: %f degC\r\n", T);
+  //printf("TEMP: %f degC\r\n", T);
 
   return T;
 }
@@ -150,7 +150,7 @@ float shtc3_read_humidity(void)
   float RH = srh / 65536;
   RH *= 100;
 
-  printf("HUMIDITY: %f %\r\n", RH);
+  //printf("HUMIDITY: %f %\r\n", RH);
 
   return RH;
 }

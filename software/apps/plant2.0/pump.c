@@ -15,34 +15,20 @@
 #define LED_GREEN EDGE_P14
 #define LED_BLUE  EDGE_P15
 
-void gpio_init(void) {
-  // Initialize output pins
-  nrf_gpio_pin_dir_set(EDGE_P13, NRF_GPIO_PIN_DIR_OUTPUT); //LEDs
-  nrf_gpio_pin_dir_set(EDGE_P14, NRF_GPIO_PIN_DIR_OUTPUT);
-  nrf_gpio_pin_dir_set(EDGE_P15, NRF_GPIO_PIN_DIR_OUTPUT);
-
-
+void pump_init(void) {
+  // Initialize output pin
   nrf_gpio_cfg_output(EDGE_P2);
-  //nrf_gpio_cfg_output(EDGE_P1);
 
-  // Set LEDs off initially
-  nrf_gpio_pin_write(EDGE_P13, 1); //write a high to the LEDs
-  nrf_gpio_pin_write(EDGE_P14, 1);
-  nrf_gpio_pin_write(EDGE_P15, 1);
-}
-
-void green_light_on(void) {
-  nrf_gpio_pin_write(EDGE_P14, 0); //Drive pin low to turn red on
-}
-
-void green_light_off(void) {
-  nrf_gpio_pin_write(EDGE_P14, 1); //Drive pin high to turn red off
+  //Write low to pump
+  nrf_gpio_pin_write(EDGE_P12, 0);
 }
 
 void turn_on_pump(void) {
-    //nrf_gpio_pin_write(EDGE_P1, 0xFFFFFFFF);
-    printf("test\n");
     nrf_gpio_pin_write(EDGE_P2, 1);
     nrf_delay_ms(500);
+    nrf_gpio_pin_write(EDGE_P2, 0);
+}
+
+void turn_off_pump(void) {
     nrf_gpio_pin_write(EDGE_P2, 0);
 }

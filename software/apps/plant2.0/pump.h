@@ -5,10 +5,7 @@
 
 #include "nrf_twi_mngr.h"
 
-void gpio_init(void);
-
-void green_light_on(void);
-
-void green_light_off(void);
+void pump_init(void);
 
 void turn_on_pump(void);
+void turn_off_pump(void);

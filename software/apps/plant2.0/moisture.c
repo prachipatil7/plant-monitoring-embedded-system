@@ -66,28 +66,9 @@ void soil_moisture_init(void) {
 }
 
 // Returns if the soil is wet or dry based on percentage of 3.3V
-// Uses all the helpers
-uint32_t get_soil_moisture(void) {
-  printf("in get_soil_moisture");
-  // Read sensor
-  float voltage = adc_sample_blocking(ADC_SOIL_CHANNEL);
-  // Get wet or dry
-  uint32_t soil = volt_to_soil(voltage);
-  // Return
-  printf("Soil is %d (0=dry,1=wet)\r\n", soil);
-  return soil;
-}
-
-// Returns if the soil is wet or dry based on percentage of 3.3V
 // Can modify to return based on actual voltage
 // No helpers
 uint32_t read_soil_moisture(void) {
-  //printf("in read_soil_moisture");
-  // read ADC counts (0-4095)
-  /*int16_t adc_counts = 0;
-  ret_code_t error_code = nrfx_saadc_sample_convert(ADC_SOIL_CHANNEL, &adc_counts);
-  APP_ERROR_CHECK(error_code);*/
-
   // convert ADC counts into voltage and percentage
   float total = 0;
   for(uint16_t i = 0; i < 100; i++) {
@@ -101,13 +82,6 @@ uint32_t read_soil_moisture(void) {
   //Around 95 or below is dry soil
   //Around 99-100 or above is wet soil
 
-  printf("avg_voltage: %f, percentage: %f\r\n", avg_voltage, percentage);
-  printf("Soil is %d (0=dry,1=wet)\r\n", soil);
-  if (soil){
-      printf("WET\r\n");
-  }
-  else {
-      printf("DRY\r\n");
-  }
+  //printf("avg_voltage: %f, percentage: %f\r\n", avg_voltage, percentage);
   return soil;
 }
