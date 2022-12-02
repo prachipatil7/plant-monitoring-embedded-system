@@ -63,6 +63,7 @@ void soil_moisture_init(void) {
   nrf_saadc_channel_config_t soil_channel_config = NRFX_SAADC_DEFAULT_CHANNEL_CONFIG_SE(ANALOG_SOIL_IN);
   error_code = nrfx_saadc_channel_init(ADC_SOIL_CHANNEL, &soil_channel_config);
   APP_ERROR_CHECK(error_code);
+  printf("soil moisture init complete");
 }
 
 // Returns if the soil is wet or dry based on percentage of 3.3V

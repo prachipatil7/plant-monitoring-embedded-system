@@ -17,7 +17,7 @@
 #include "pump.h"
 #include "spectral.h"
 #include "app_timer.h"
-
+#include "led_driver.h"
 //APP_TIMER_DEF(TEMP_TIMER);
 //void print_temp();
 void print_test() {
@@ -47,8 +47,9 @@ int main(void) {
   /*app_timer_init();
   app_timer_create(&TEMP_TIMER, APP_TIMER_MODE_REPEATED, print_test);
   app_timer_start(TEMP_TIMER, 32768*2, NULL);*/
-  /*spectral_init(&twi_mngr_instance);
-  nrf_delay_ms(1000);*/
+  spectral_init(&twi_mngr_instance);
+  led_init(&twi_mngr_instance);
+  nrf_delay_ms(1000);
   // Loop forever
   uint16_t buf[10];
 
@@ -64,7 +65,7 @@ int main(void) {
 
 
 
-    while (1) {
+    while (0) {
     //print_test();
     read_spectral_all_channels(buf);
     for (uint8_t i=0; i<10; i++) {

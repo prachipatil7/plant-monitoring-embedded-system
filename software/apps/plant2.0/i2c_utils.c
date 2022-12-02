@@ -57,7 +57,9 @@ void i2c_reg_write(uint8_t i2c_addr, uint8_t reg_addr, uint8_t data) {
   //printf("about 2 perform\n");
 
   ret_code_t err = nrf_twi_mngr_perform(i2c_manager, NULL, write_transfer, 1, NULL);
+  if (err != 0){
   printf("ret code on write is %u\n", err);
+}
 }
 
 //Need to check if this is right
