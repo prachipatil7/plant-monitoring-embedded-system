@@ -1,7 +1,3 @@
-// I2C sensors app
-//
-// Read from I2C accelerometer/magnetometer on the Microbit
-
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -11,15 +7,14 @@
 #include "nrf_twi_mngr.h"
 
 #include "microbit_v2.h"
-//#include "i2c_utils.h"
 #include "moisture.h"
 #include "temp-humidity.h"
 #include "pump.h"
 #include "spectral.h"
 #include "app_timer.h"
 #include "led_driver.h"
-//APP_TIMER_DEF(TEMP_TIMER);
-//void print_temp();
+#include "led_matrix.h"
+
 void print_test() {
   printf("Moisture: %ld\n", read_soil_moisture());
 }
@@ -38,38 +33,28 @@ int main(void) {
   i2c_config.interrupt_priority = 0;
   nrf_twi_mngr_init(&twi_mngr_instance, &i2c_config);
 
-  // Initialize the LSM303AGR accelerometer/magnetometer sensor
-  /*shtc3_init(&twi_mngr_instance);
-  shtc3_read_temperature();
-  shtc3_read_humidity();*/
-  //moisture_init(&twi_mngr_instance);
-  //TODO: implement me!
-  /*app_timer_init();
-  app_timer_create(&TEMP_TIMER, APP_TIMER_MODE_REPEATED, print_test);
-  app_timer_start(TEMP_TIMER, 32768*2, NULL);*/
-  spectral_init(&twi_mngr_instance);
-  led_init(&twi_mngr_instance);
-  nrf_delay_ms(1000);
-  // Loop forever
-  uint16_t buf[10];
-
   //Initializers
   shtc3_init(&twi_mngr_instance);
   pump_init();
   soil_moisture_init();
+  spectral_init(&twi_mngr_instance);
+  led_init(&twi_mngr_instance);
+  nrf_delay_ms(1000);
 
-  //Turn pump on and off
-  /*turn_on_pump();
-  nrf_delay_ms(500);
-  turn_off_pump();*/
+  uint16_t spectral_buf[10];
 
+  /*char** strings = (char **)malloc(3 * sizeof(char *));
+  strings[0] = "DICK";
+  strings[1] = "AND Balls!";
+  strings[2] = "0End";
+  led_matrix_string(strings);*/
+  led_matrix_init();
 
-
-    while (0) {
-    //print_test();
-    read_spectral_all_channels(buf);
+    // Loop forever
+    while (1) {
+    read_spectral_all_channels(spectral_buf);
     for (uint8_t i=0; i<10; i++) {
-      printf("F%d: %d\n", i+1, buf[i]);
+      printf("F%d: %d\n\r", i+1, spectral_buf[i]);
     }
     printf("\n");
 
@@ -89,6 +74,8 @@ int main(void) {
 
     printf("TEMP: %f degC\r\n", T);
     printf("HUMIDITY: %f \r\n", RH);
+
+    temp_bar(T);
 
 
     printf("\n");
