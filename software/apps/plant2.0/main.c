@@ -61,8 +61,8 @@ int main(void) {
     uint32_t is_wet = read_soil_moisture();
     if(!is_wet) {
         turn_on_pump();
-        nrf_delay_ms(500);
-        turn_off_pump();
+        //nrf_delay_ms(500);
+        //turn_off_pump();
         printf("Soil is DRY\r\n");
     }
     else {

@@ -11,12 +11,16 @@ static const uint8_t TEMP_MOISTURE_SENSOR = 0x70;
 // commands from datasheet 
 typedef enum {
   // after some time duration = ?? need to put to sleep
-  SLEEP = 0xB098,
+  SLEEP_REG = 0xB0,
+  SLEEP_COMM = 98,
   // to communicate, needs to be awake
-  WAKEUP = 0x3517,
+  WAKEUP_REG = 0x35,
+  WAKEUP_COMM = 0x17,
   // clock stretching enabled
-  CS_READ_T = 0x7CA2,
-  CS_READ_H = 0x5C24,
+  READ_TEMP_REG = 0x7C,
+  READ_TEMP_COMM = 0xA2,
+  READ_HUM_REG = 0x5C,
+  READ_HUM_COMM = 0x24,
   CS_READ_T_LP = 0x6458,
   CS_READ_H_LP = 0x44DE,
   // clock stretching disabled

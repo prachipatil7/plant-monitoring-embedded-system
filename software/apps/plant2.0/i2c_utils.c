@@ -32,8 +32,6 @@ uint8_t i2c_reg_read(uint8_t i2c_addr, uint8_t reg_addr) {
 		       &rx_buf,
 		       1,
 		       0)
-						   
-						   
   };
   //printf("about to read perform\n");
   ret_code_t err = nrf_twi_mngr_perform(i2c_manager, NULL, read_transfer, 2, NULL);
@@ -61,6 +59,7 @@ void i2c_reg_write(uint8_t i2c_addr, uint8_t reg_addr, uint8_t data) {
   printf("ret code on write is %u\n", err);
 }
 }
+
 
 //Need to check if this is right
 void i2c_init(const nrf_twi_mngr_t* i2c) {
