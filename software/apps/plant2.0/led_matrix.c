@@ -28,33 +28,6 @@ col_leds[] = {LED_COL1, LED_COL2, LED_COL3, LED_COL4, LED_COL5};
 
 led_states[5][5] = {false};
 
-static void char_handler(void* _unused) {
-    character_led(active_string[char_index]);
-    char_index += 1;
-    if (char_index > strlen(active_string)) { //string is completed
-        str_index += 1;
-        if (str_index >= num_strings) {//string array is completed
-            str_index = 0;
-        }
-        active_string = strings[str_index];
-        printf("Active: %s\n", active_string);
-        char_index = 0;
-    }
-}
-
-void character_led(char c) {
-    for (int row = 0; row < 5; row++) {
-        for (int col = 0; col < 5; col++) {
-            if ((font[c][row] >> col) & 1) {
-                led_states[row][col] = true;
-            }
-            else {
-                led_states[row][col] = false; //By default
-            }
-        }
-    }
-}
-
 void clear_led() {
     printf("clear_led\r\n");
     for (int row = 0; row < 5; row++) {
@@ -64,26 +37,57 @@ void clear_led() {
     }
 }
 
-void bar_led(uint16_t pos, bool is_temp) {
-    printf("bar_led\r\n");
+void bar_led(uint16_t temp_pos, uint16_t hum_pos) {
     clear_led();
-    printf("cleared leds\r\n");
-    if (is_temp) {
-        led_states[0][pos] = true;
-        led_states[1][pos] = true;
-    }
+    led_states[0][temp_pos] = true;
+    led_states[1][temp_pos] = true;
+    led_states[3][hum_pos] = true;
+    led_states[4][hum_pos] = true;
+
 }
 
-void temp_bar(float temp) {
-    printf("temp_bar\r\n");
-    if (temp >= 23) {
-        bar_led(2, true);
+void temp_humidity_bar(float temp, float rh) {
+    float ideal_temp = 23;
+    float temp_interval = 2;
+    float ideal_humidity = 40; //Should do 50
+    float humidity_interval = 1; //Should do 5
+
+    uint16_t temp_pos;
+    if (temp >= ideal_temp+temp_interval*2) {
+        temp_pos = 4;
+    }
+    else if (temp >= ideal_temp+temp_interval) {
+        temp_pos = 3;
+    }
+    else if (temp >= ideal_temp) {
+        temp_pos = 2;
+    }
+    else if (temp >= ideal_temp-temp_interval) {
+        temp_pos = 1;
     }
     else {
-        bar_led(0, true);
+        temp_pos = 0;
     }
-}
 
+    uint16_t hum_pos;
+    if (rh >= ideal_humidity+humidity_interval*2) {
+        hum_pos = 4;
+    }
+    else if (rh >= ideal_humidity+humidity_interval) {
+        hum_pos = 3;
+    }
+    else if (rh >= ideal_humidity) {
+        hum_pos = 2;
+    }
+    else if (rh >= ideal_humidity-humidity_interval) {
+        hum_pos = 1;
+    }
+    else {
+        hum_pos = 0;
+    }
+
+    bar_led(temp_pos, hum_pos);
+}
 
 static void modify_row(void* _unused) {
     //Inactivate Previous Row
@@ -105,29 +109,11 @@ static void modify_row(void* _unused) {
         }
     }
 
-    //nrf_gpio_pin_toggle(LED_COL2);
-    //nrf_gpio_pin_toggle(LED_COL3);
-    //printf("modified\n");
 
     active_row += 1;
     if (active_row > 4) {
         active_row = 0;
     }
-
-}
-
-void led_matrix_string(char** str_arr) {
-    strings = str_arr;
-    //printf("in loop: %s\n", strings[0]);
-    //printf("in loop: %s\n", strings[1]);
-    while(strings[str_index] != "0End") {
-        // printf("in loop: %s\n", strings[str_index]);
-        str_index += 1;
-    }
-    num_strings = str_index; ///////!!!
-    str_index = 0;
-    active_string = strings[0];
-    printf("Active: %s\n", active_string);
 
 }
 
@@ -144,13 +130,6 @@ void led_matrix_init(void) {
 
     // initialize timer(s) (Part 3 and onwards)
     app_timer_init();
-    //app_timer_create(&string_timer, APP_TIMER_MODE_REPEATED, string_led);
-    //app_timer_start(string_timer, 5*second, NULL);
-    //character_led('C');
     app_timer_create(&timer_1, APP_TIMER_MODE_REPEATED, modify_row);
     app_timer_start(timer_1, second/500, NULL);
-
-    //app_timer_create(&char_timer, APP_TIMER_MODE_REPEATED, char_handler);
-    //app_timer_start(char_timer, second, NULL);
-    //set default state for the LED display (Part 4 and onwards)
 }

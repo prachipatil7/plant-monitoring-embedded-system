@@ -75,7 +75,8 @@ int main(void) {
     printf("TEMP: %f degC\r\n", T);
     printf("HUMIDITY: %f \r\n", RH);
 
-    temp_bar(T);
+    temp_humidity_bar(T, RH);
+    //humidity_bar(RH);
 
 
     printf("\n");
