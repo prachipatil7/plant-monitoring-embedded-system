@@ -61,11 +61,9 @@ void setup_high_channels() {
 
 void enable_spectral_measurement(bool enable) {
    i2c_change_bit(SPECT_DEV_ADDR, SPECT_ENABLE_REG, 1, (int)enable);
-   //printf("    EN REG: %x \n", i2c_reg_read(SPECT_DEV_ADDR, SPECT_ENABLE_REG));
 }
 
 void set_smux_low(bool f1_f4) {
-   //printf("disable spectral measurement\n");
    enable_spectral_measurement(false);
    i2c_reg_write(SPECT_DEV_ADDR, SPECT_SMUX_CFG_REG, 2<<3); // set to write
    if (f1_f4) {
@@ -73,9 +71,7 @@ void set_smux_low(bool f1_f4) {
   } else {
     setup_high_channels();
   }
-  //printf("enable smux\n");
   i2c_change_bit(SPECT_DEV_ADDR, SPECT_ENABLE_REG, 4, 1); // enable SMUX
-  //printf("    EN REG: %x \n", i2c_reg_read(SPECT_DEV_ADDR, SPECT_ENABLE_REG));
 }
 
 bool data_is_ready(){
@@ -90,16 +86,14 @@ void delay_for_data() {
 }
 
 uint16_t read_channel(uint8_t channel) {
-   
    uint8_t lsb = i2c_reg_read(SPECT_DEV_ADDR, SPECT_CH0_REG_L + 2 * channel);
    uint16_t msb = (uint16_t) i2c_reg_read(SPECT_DEV_ADDR, SPECT_CH0_REG_H + 2 * channel);
-   //printf("LSB: %d \n MSB: %d \n", lsb, msb);
    return (msb << 8) | lsb;
 }
 
 void read_status() {
   uint8_t status = i2c_reg_read(SPECT_DEV_ADDR, SPECT_ASTATUS_REG);
-  //printf("   ASTATUS: %d\n", status);
+  printf("   ASTATUS: %d\n", status);
 }
 
 void read_spectral_all_channels(uint16_t *buf) {
