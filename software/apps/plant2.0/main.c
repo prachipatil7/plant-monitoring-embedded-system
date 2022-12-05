@@ -15,10 +15,6 @@
 #include "led_driver.h"
 #include "led_matrix.h"
 
-void print_test() {
-  printf("Moisture: %ld\n", read_soil_moisture());
-}
-
 // Global variables
 NRF_TWI_MNGR_DEF(twi_mngr_instance, 1, 0);
 
@@ -34,53 +30,42 @@ int main(void) {
   nrf_twi_mngr_init(&twi_mngr_instance, &i2c_config);
 
   //Initializers
-  shtc3_init(&twi_mngr_instance);
-  pump_init();
   soil_moisture_init();
+  pump_init();
+
+  shtc3_init(&twi_mngr_instance);
+  led_matrix_init();
+
   spectral_init(&twi_mngr_instance);
   led_init(&twi_mngr_instance);
+
   nrf_delay_ms(1000);
 
   uint16_t spectral_buf[10];
 
-  /*char** strings = (char **)malloc(3 * sizeof(char *));
-  strings[0] = "DICK";
-  strings[1] = "AND Balls!";
-  strings[2] = "0End";
-  led_matrix_string(strings);*/
-  led_matrix_init();
-
+  float led_off = 0.001;
     // Loop forever
     while (1) {
-    read_spectral_all_channels(spectral_buf);
-    for (uint8_t i=0; i<10; i++) {
-      printf("F%d: %d\n\r", i+1, spectral_buf[i]);
-    }
-    printf("\n");
+        //Spectrometer -> LED Driver
+        read_spectral_all_channels(spectral_buf);
+        adjust_led_brightness(spectral_buf);
 
-    uint32_t is_wet = read_soil_moisture();
-    if(!is_wet) {
-        turn_on_pump();
-        //nrf_delay_ms(500);
-        //turn_off_pump();
-        printf("Soil is DRY\r\n");
-    }
-    else {
-        printf("Soil is WET\r\n");
-    }
+        //Temp-Humidity -> LED Matrix
+        temp_humidity_bar(shtc3_read_temperature(), shtc3_read_humidity())
 
-    float T = shtc3_read_temperature();
-    float RH = shtc3_read_humidity();
+        //Soil Moisture -> Water Pump
+        uint32_t is_wet = read_soil_moisture();
+        if(!is_wet) {
+            turn_on_pump();
+            nrf_delay_ms(500);
+            turn_off_pump();
+            printf("Soil is DRY\r\n");
+        }
+        else {
+            printf("Soil is WET\r\n");
+        }
 
-    printf("TEMP: %f degC\r\n", T);
-    printf("HUMIDITY: %f \r\n", RH);
-
-    temp_humidity_bar(T, RH);
-    //humidity_bar(RH);
-
-
-    printf("\n");
-    nrf_delay_ms(2000);
+        nrf_delay_ms(500);
   }
 }
 
