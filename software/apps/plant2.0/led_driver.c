@@ -7,7 +7,7 @@
 
 
 // Pointer to an initialized I2C instance to use for transactions
-static const nrf_twi_mngr_t *i2c_manager = NULL;
+//static const nrf_twi_mngr_t *i2c_manager = NULL;
 
 void set_pwm_frequency(uint16_t freq) {
 
@@ -80,7 +80,7 @@ void adjust_led_brightness(uint16_t *buf) {
 
 
 void led_init(const nrf_twi_mngr_t *i2c) {
-  i2c_init(i2c);
+  //i2c_init(i2c);
   set_pwm_frequency(1600);
 }
 

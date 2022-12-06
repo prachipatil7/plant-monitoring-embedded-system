@@ -51,7 +51,7 @@ int main(void) {
         adjust_led_brightness(spectral_buf);
 
         //Temp-Humidity -> LED Matrix
-        temp_humidity_bar(shtc3_read_temperature(), shtc3_read_humidity())
+        temp_humidity_bar(shtc3_read_temperature(), shtc3_read_humidity());
 
         //Soil Moisture -> Water Pump
         uint32_t is_wet = read_soil_moisture();

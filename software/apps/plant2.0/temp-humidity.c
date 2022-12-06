@@ -11,7 +11,7 @@
 #include <math.h>
 
 // Pointer to an initialized I2C instance to use for transactions
-static const nrf_twi_mngr_t *i2c_manager = NULL;
+//static const nrf_twi_mngr_t *i2c_manager = NULL;
 
 // Initialize and configure the LSM303AGR accelerometer/magnetometer
 //
@@ -19,7 +19,7 @@ static const nrf_twi_mngr_t *i2c_manager = NULL;
 
 void shtc3_init(const nrf_twi_mngr_t *i2c)
 {
-  i2c_manager = i2c;
+  i2c_init(i2c);
 }
 
 float shtc3_read_temperature(void) {
@@ -27,12 +27,7 @@ float shtc3_read_temperature(void) {
 
     i2c_reg_write(TEMP_MOISTURE_SENSOR, WAKEUP_REG, WAKEUP_COMM);
     i2c_reg_write(TEMP_MOISTURE_SENSOR, READ_TEMP_REG, READ_TEMP_COMM);
-    nrf_twi_mngr_transfer_t const read_transfer[] = {
-            NRF_TWI_MNGR_READ(TEMP_MOISTURE_SENSOR,
-                              &temp,
-                              2,
-                              NRF_TWI_MNGR_NO_STOP)};
-    nrf_twi_mngr_perform(i2c_manager, NULL, read_transfer, 1, NULL);
+    i2c_dev_read(TEMP_MOISTURE_SENSOR, &temp);
     i2c_reg_write(TEMP_MOISTURE_SENSOR, SLEEP_REG, SLEEP_COMM);
 
     uint16_t upper = temp[0];
@@ -44,7 +39,7 @@ float shtc3_read_temperature(void) {
     T *= 175;
     T -= 45;
 
-    //printf("TEMP: %f degC\r\n", T);
+    printf("TEMP: %f degC\r\n", T);
 
     return T;
 
@@ -55,12 +50,7 @@ float shtc3_read_humidity(void) {
 
     i2c_reg_write(TEMP_MOISTURE_SENSOR, WAKEUP_REG, WAKEUP_COMM);
     i2c_reg_write(TEMP_MOISTURE_SENSOR, READ_HUM_REG, READ_HUM_COMM);
-    nrf_twi_mngr_transfer_t const read_transfer[] = {
-            NRF_TWI_MNGR_READ(TEMP_MOISTURE_SENSOR,
-                              &humidity,
-                              2,
-                              NRF_TWI_MNGR_NO_STOP)};
-    nrf_twi_mngr_perform(i2c_manager, NULL, read_transfer, 1, NULL);
+    i2c_dev_read(TEMP_MOISTURE_SENSOR, &humidity);
     i2c_reg_write(TEMP_MOISTURE_SENSOR, SLEEP_REG, SLEEP_COMM);
 
     uint16_t upper = humidity[0];
@@ -71,7 +61,7 @@ float shtc3_read_humidity(void) {
     float RH = srh / 65536;
     RH *= 100;
 
-    //printf("HUMIDITY: %f %\r\n", RH);
+    printf("HUMIDITY: %f %\r\n", RH);
 
     return RH;
 }
