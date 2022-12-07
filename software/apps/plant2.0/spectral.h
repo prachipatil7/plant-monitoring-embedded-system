@@ -18,11 +18,6 @@ typedef enum {
    SPECT_DATA_READY_REG = 0xA3,
 } spect_reg_t;
 
-
-
 void spectral_init(const nrf_twi_mngr_t* i2c);
-
-
 uint8_t read_spectral_whoami(void);
-
 void read_spectral_all_channels(uint16_t *buf);
