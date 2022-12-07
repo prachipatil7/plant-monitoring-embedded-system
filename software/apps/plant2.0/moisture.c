@@ -28,61 +28,53 @@ static float adc_sample_blocking(uint8_t channel) {
 
 // Event handler -- don't care about SAADC events, ignore
 static void saadc_event_callback(nrfx_saadc_evt_t const* _unused) {
-  float read = adc_sample_blocking(ADC_SOIL_CHANNEL);
-  float temp = volt_to_soil(read);
+    float read = adc_sample_blocking(ADC_SOIL_CHANNEL);
+    float temp = volt_to_soil(read);
 }
 
 static uint32_t volt_to_soil(float voltage) {
-  // soil: the soil moisture is either wet = 1 or dry = 0
-  // this paper might help convert voltage to wetness
-  // https://www.researchgate.net/figure/Voltage-versus-moisture-content-of-the-soil_fig5_305639219
-  // or we just try it out to choose the cutoff
+    // soil: the soil moisture is either wet = 1 or dry = 0
 
-  uint32_t percentage = (voltage / 3.3) * 100;
-  uint32_t soil = percentage > 50;
+    uint32_t percentage = (voltage / 3.3) * 100;
+    uint32_t soil = percentage > 50;
 
-  return soil;
+    return soil;
 }
 
 /**** ACCESSIBLE FROM MAIN.C ****/
 
 // Initialize the ADC and set up the soil moisture sensor
 void soil_moisture_init(void) {
-  printf("in soil_moisture_init\r\n");
-  // Initialize the SAADC
-  nrfx_saadc_config_t saadc_config = {
-    .resolution = NRF_SAADC_RESOLUTION_12BIT,
-    .oversample = NRF_SAADC_OVERSAMPLE_DISABLED,
-    .interrupt_priority = 0,
-    .low_power_mode = false,
-  };
-  ret_code_t error_code = nrfx_saadc_init(&saadc_config, saadc_event_callback);
-  APP_ERROR_CHECK(error_code);
+    // Initialize the SAADC
+    nrfx_saadc_config_t saadc_config = {
+        .resolution = NRF_SAADC_RESOLUTION_12BIT,
+        .oversample = NRF_SAADC_OVERSAMPLE_DISABLED,
+        .interrupt_priority = 0,
+        .low_power_mode = false,
+    };
+    ret_code_t error_code = nrfx_saadc_init(&saadc_config, saadc_event_callback);
+    APP_ERROR_CHECK(error_code);
 
-  // Initialize soil moisture sensor channel
-  nrf_saadc_channel_config_t soil_channel_config = NRFX_SAADC_DEFAULT_CHANNEL_CONFIG_SE(ANALOG_SOIL_IN);
-  error_code = nrfx_saadc_channel_init(ADC_SOIL_CHANNEL, &soil_channel_config);
-  APP_ERROR_CHECK(error_code);
-  printf("soil moisture init complete");
+    // Initialize soil moisture sensor channel
+    nrf_saadc_channel_config_t soil_channel_config = NRFX_SAADC_DEFAULT_CHANNEL_CONFIG_SE(ANALOG_SOIL_IN);
+    error_code = nrfx_saadc_channel_init(ADC_SOIL_CHANNEL, &soil_channel_config);
+    APP_ERROR_CHECK(error_code);
 }
 
 // Returns if the soil is wet or dry based on percentage of 3.3V
-// Can modify to return based on actual voltage
-// No helpers
 uint32_t read_soil_moisture(void) {
-  // convert ADC counts into voltage and percentage
-  float total = 0;
-  for(uint16_t i = 0; i < 100; i++) {
-      total += adc_sample_blocking(0);
-  }
-  float avg_voltage = total / 100;
-  float percentage = avg_voltage*100 / 3.3;
+    float total = 0;
+    for(uint16_t i = 0; i < 100; i++) {
+        total += adc_sample_blocking(0);
+    }
+    float avg_voltage = total / 100;
+    float percentage = avg_voltage*100 / 3.3;
 
-  // soil: the soil moisture is either wet = 1 or dry = 0
-  bool soil = percentage >= 99; //was 50 as per js code
-  //Around 95 or below is dry soil
-  //Around 99-100 or above is wet soil
-
-  //printf("avg_voltage: %f, percentage: %f\r\n", avg_voltage, percentage);
-  return soil;
+    // soil: the soil moisture is either wet = 1 or dry = 0
+    bool soil = percentage >= 99;
+    /* From testing, 
+    around 95 or below is dry soil
+    around 99-100 or above is wet soil */
+    
+    return soil;
 }
