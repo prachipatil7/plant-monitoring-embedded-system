@@ -19,8 +19,6 @@ typedef enum {
    LED6 = 0x1e,
    LED7 = 0x22,
    LED8 = 0x26,
-
-
 } led_reg_t;
 
 void led_init(const nrf_twi_mngr_t *i2c);
