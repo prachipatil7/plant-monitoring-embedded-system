@@ -19,7 +19,7 @@
 NRF_TWI_MNGR_DEF(twi_mngr_instance, 1, 0);
 
 int main(void) {
-  printf("\rBoard started!\r\n");
+  printf("\r\nBoard started!\r\n");
 
   // Initialize I2C peripheral and driver
   nrf_drv_twi_config_t i2c_config = NRF_DRV_TWI_DEFAULT_CONFIG;
@@ -29,7 +29,7 @@ int main(void) {
   i2c_config.interrupt_priority = 0;
   nrf_twi_mngr_init(&twi_mngr_instance, &i2c_config);
 
-  //Initializers
+  // Initializers
   soil_moisture_init();
   pump_init();
 
@@ -42,32 +42,29 @@ int main(void) {
   nrf_delay_ms(1000);
 
   uint16_t spectral_buf[10];
-
   float led_off = 0.001;
-    // Loop forever
-    while (1) {
-        //Spectrometer -> LED Driver
-        read_spectral_all_channels(spectral_buf);
-        adjust_led_brightness(spectral_buf);
+  
+  // Loop forever
+  while (1) {
+    //Spectrometer -> LED Driver
+    read_spectral_all_channels(spectral_buf);
+    adjust_led_brightness(spectral_buf);
 
-        //Temp-Humidity -> LED Matrix
-        temp_humidity_bar(shtc3_read_temperature(), shtc3_read_humidity());
+    //Temp-Humidity -> LED Matrix
+    temp_humidity_bar(shtc3_read_temperature(), shtc3_read_humidity());
 
-        //Soil Moisture -> Water Pump
-        uint32_t is_wet = read_soil_moisture();
-        if(!is_wet) {
-            turn_on_pump();
-            nrf_delay_ms(500);
-            turn_off_pump();
-            printf("Soil is DRY\r\n");
-        }
-        else {
-            printf("Soil is WET\r\n");
-        }
+    //Soil Moisture -> Water Pump
+    uint32_t is_wet = read_soil_moisture();
+    if(!is_wet) {
+      turn_on_pump();
+      nrf_delay_ms(500);
+      turn_off_pump();
+      //printf("Soil is DRY\r\n");
+    }
+    else {
+       //printf("Soil is WET\r\n");
+    }
 
-        nrf_delay_ms(500);
+    nrf_delay_ms(500);
   }
 }
-
-
-
