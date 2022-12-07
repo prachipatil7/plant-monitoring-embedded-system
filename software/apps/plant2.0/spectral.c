@@ -1,7 +1,4 @@
-// LSM303AGR driver for Microbit_v2
-//
-// Initializes sensor and communicates over I2C
-// Capable of reading temperature, acceleration, and magnetic field strength
+// AS7341 11-Channel Spectral Sensor Driver
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -11,10 +8,6 @@
 #include "nrf_delay.h"
 #include <math.h>
 
-
-// Read the moisture sensor
-//
-// Return measurement as [What Unit?]
 uint8_t read_spectral_whoami(void) {
   uint8_t whoami = i2c_reg_read(SPECT_DEV_ADDR, SPECT_WHOAMI_REG);			       
   return whoami;
