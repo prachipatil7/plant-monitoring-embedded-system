@@ -6,6 +6,5 @@
 #include "nrf_twi_mngr.h"
 
 void pump_init(void);
-
 void turn_on_pump(void);
 void turn_off_pump(void);
