@@ -1,20 +1,9 @@
-// SHTC3 Humidity (and Temperature) Sensor
-// Datasheet: https://cdn.sparkfun.com/assets/1/1/f/3/b/Sensirion_Humidity_Sensors_SHTC3_Datasheet.pdf
-
-
-
 #include "led_driver.h"
-
-
-// Pointer to an initialized I2C instance to use for transactions
-//static const nrf_twi_mngr_t *i2c_manager = NULL;
 
 void set_pwm_frequency(uint16_t freq) {
 
   float prescaleval = ((27000000 / (freq * 4096.0)) + 0.5) - 1;
   uint8_t prescale = (uint8_t)prescaleval;
-
-  printf("prescale is %d\n\r", prescale);
   
   i2c_change_bit(LED_DEV_ADDR, LED_MODE1_REG, 4, 1); // put to sleep
   i2c_reg_read(LED_DEV_ADDR, LED_PRESCALER_REG);
@@ -25,21 +14,21 @@ void set_pwm_frequency(uint16_t freq) {
   i2c_change_bit(LED_DEV_ADDR, LED_MODE1_REG, 5, 1);
 }
 
-void set_pwm(uint16_t address, float power){
+void set_pwm(uint16_t address, float power) {
 
-uint16_t on_counts = (uint16_t)(power*4096);
-uint16_t off_counts = on_counts-1 + on_counts - 4096;
+  uint16_t on_counts = (uint16_t)(power*4096);
+  uint16_t off_counts = on_counts-1 + on_counts - 4096;
 
-uint8_t lower_on = (uint8_t)((on_counts-1)&0x00ff);
-uint8_t upper_on = (uint8_t)(((on_counts-1)&0x0f00)>>8);
-uint8_t lower_off = (uint8_t)((off_counts)&0x00ff);
-uint8_t upper_off = (uint8_t)(((off_counts)&0x0f00)>>8);
+  uint8_t lower_on = (uint8_t)((on_counts-1)&0x00ff);
+  uint8_t upper_on = (uint8_t)(((on_counts-1)&0x0f00)>>8);
+  uint8_t lower_off = (uint8_t)((off_counts)&0x00ff);
+  uint8_t upper_off = (uint8_t)(((off_counts)&0x0f00)>>8);
 
 
-//(LED_DEV_ADDR, address, lower_on);
-i2c_reg_write(LED_DEV_ADDR, address+0x1, upper_on);
-i2c_reg_write(LED_DEV_ADDR, address+0x2, lower_off);
-i2c_reg_write(LED_DEV_ADDR, address+0x3, upper_off);
+  //(LED_DEV_ADDR, address, lower_on);
+  i2c_reg_write(LED_DEV_ADDR, address+0x1, upper_on);
+  i2c_reg_write(LED_DEV_ADDR, address+0x2, lower_off);
+  i2c_reg_write(LED_DEV_ADDR, address+0x3, upper_off);
 
 }
 
@@ -70,17 +59,11 @@ void adjust_led_brightness(uint16_t *buf) {
         if (power[i] > max) {
             power[i] = max;
         }
-        //printf("ideal %d: %f\n\r", i, ideal[i]);
-        //printf("avg %d: %f\n\r", i, avg[i]);
-        //printf("pow %d: %f\n\r", i, power[i]);
-        printf("\n");
     }
     light_on(power[0], power[1], power[2]);
 }
 
-
 void led_init(const nrf_twi_mngr_t *i2c) {
-  //i2c_init(i2c);
   set_pwm_frequency(1600);
 }
 
