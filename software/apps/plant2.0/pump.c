@@ -11,16 +11,12 @@
 #include "nrf_gpio.h"
 #include "nrfx_gpiote.h"
 
-#define LED_RED   EDGE_P13
-#define LED_GREEN EDGE_P14
-#define LED_BLUE  EDGE_P15
-
 void pump_init(void) {
-  // Initialize output pin
-  nrf_gpio_cfg_output(EDGE_P2);
+    // Initialize output pin
+    nrf_gpio_cfg_output(EDGE_P2);
 
-  //Write low to pump
-  nrf_gpio_pin_write(EDGE_P12, 0);
+    //Write low to pump
+    nrf_gpio_pin_write(EDGE_P12, 0);
 }
 
 void turn_on_pump(void) {
