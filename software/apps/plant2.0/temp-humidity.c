@@ -10,15 +10,7 @@
 
 #include <math.h>
 
-// Pointer to an initialized I2C instance to use for transactions
-//static const nrf_twi_mngr_t *i2c_manager = NULL;
-
-// Initialize and configure the LSM303AGR accelerometer/magnetometer
-//
-// i2c - pointer to already initialized and enabled twim instance
-
-void shtc3_init(const nrf_twi_mngr_t *i2c)
-{
+void shtc3_init(const nrf_twi_mngr_t *i2c) {
   i2c_init(i2c);
 }
 
@@ -39,10 +31,7 @@ float shtc3_read_temperature(void) {
     T *= 175;
     T -= 45;
 
-    printf("TEMP: %f degC\r\n", T);
-
     return T;
-
 }
 
 float shtc3_read_humidity(void) {
@@ -60,8 +49,6 @@ float shtc3_read_humidity(void) {
     float srh = (float) comb;
     float RH = srh / 65536;
     RH *= 100;
-
-    printf("HUMIDITY: %f %\r\n", RH);
 
     return RH;
 }
