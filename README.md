@@ -3,6 +3,12 @@
 This is the final project created for CS346: Microprocessor System Design. Our team created **Plant2.0**, an automated plant care system that takes care of watering, light intake, and temperature/humidity monitoring.
 
 ## Infrastructure
+| **Planning Diagram** | **Final Product** |
+| -- | -- |
+| <img width="397" alt="Screen Shot 2024-06-21 at 12 25 38" src="https://github.com/prachipatil7/plant-monitoring-embedded-system/assets/62350419/837beee7-b086-44ed-8fb4-e818f3c1d8d4"> | Coming soon...|
+
+
+
 ### The Controller
 For this project, we used the [Micro:bit](https://microbit.org/) as our main controller. This is nice because it comes with an easy-to-use interface, and has a few builtin features such as the LED matrix.
 
