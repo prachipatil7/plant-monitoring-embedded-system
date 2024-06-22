@@ -5,8 +5,7 @@ This is the final project created for CS346: Microprocessor System Design. Our t
 ## Infrastructure
 | **Planning Diagram** | **Final Product** |
 | -- | -- |
-| <img width="397" alt="Screen Shot 2024-06-21 at 12 25 38" src="https://github.com/prachipatil7/plant-monitoring-embedded-system/assets/62350419/837beee7-b086-44ed-8fb4-e818f3c1d8d4"> | Coming soon...|
-
+| <img width="400" alt="Plant monitor diagram" src="https://github.com/prachipatil7/plant-monitoring-embedded-system/assets/62350419/837beee7-b086-44ed-8fb4-e818f3c1d8d4"> | <img width="400" alt="Plant monitor photo" src="https://github.com/prachipatil7/plant-monitoring-embedded-system/assets/62350419/8123057e-6389-4305-a4e6-1596e230dced">|
 
 
 ### The Controller
